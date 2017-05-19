@@ -69,7 +69,7 @@ def makeYqlQuery(req):
 
 
 def makeWebhookResult(data):
-    first = data.get('mpcEulaConfig')[0]
+    first = data.get('mpcEulaConfig')
     if first is None:
         return {}
 
