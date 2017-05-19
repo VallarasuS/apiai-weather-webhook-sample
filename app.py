@@ -45,6 +45,7 @@ def processRequest(req):
 
     result = urlopen(request).read()
     data = json.loads(result)
+    print(data)
     res = makeWebhookResult(data)
     return res
 
@@ -55,7 +56,7 @@ def makeYqlQuery(req):
     parameters = result.get("parameters")
     prod = parameters.get("productName")
     print(prod)
-    cred = result.get("credential")
+    cred = parameters.get("credential")
     print(cred)
     if prod is None:
         return None
