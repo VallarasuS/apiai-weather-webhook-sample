@@ -23,9 +23,6 @@ app = Flask(__name__)
 def webhook():
     req = request.get_json(silent=True, force=True)
 
-    print("Request:")
-    print(json.dumps(req, indent=4))
-
     res = processRequest(req)
 
     res = json.dumps(res, indent=4)
@@ -54,9 +51,8 @@ def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
     prod = parameters.get("productName")
-    print(prod)
     cred = parameters.get("credential")
-    print(cred)
+    
     if prod is None:
         return None
     
@@ -72,19 +68,26 @@ def makeWebhookResult(data):
     first = data.get('mpcEulaConfig')[0]
     if first is None:
         return {}
-    
-    print(first)
 
     productName = first.get('mpcProductName')
     if productName is None:
         return {}
 
+    print(productName)
+    
     createdDateTime = first.get('createdDateTime')
     if createdDateTime is None:
         return {}
 
+    print(createdDateTime)
+    
     text = first.get('text')
+    
+    if text is None:
+        return {}
 
+    text = "HONEYWELL MAXPRO CLOUD HOSTED SERVICES END USER LICENSE AGREEMENT [truncated]..."
+    
     # print(json.dumps(item, indent=4))
 
     speech = "EULA for " + productName + " created on  " + createdDateTime + " is : " + text 
