@@ -45,7 +45,6 @@ def processRequest(req):
 
     result = urlopen(request).read()
     data = json.loads(result)
-    print(data)
     res = makeWebhookResult(data)
     return res
 
@@ -69,15 +68,18 @@ def makeYqlQuery(req):
 
 
 def makeWebhookResult(data):
-    first = data.get('mpcEulaConfig')
+    print("makeWebhookResult entry")
+    first = data.get('mpcEulaConfig')[0]
     if first is None:
         return {}
+    
+    print(first)
 
     productName = first.get('mpcProductName')
     if productName is None:
         return {}
 
-    createdDateTime = first.get('channel')
+    createdDateTime = first.get('createdDateTime')
     if createdDateTime is None:
         return {}
 
