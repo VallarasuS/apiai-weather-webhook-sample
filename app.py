@@ -34,7 +34,7 @@ def webhook():
 
 def processRequest(req):
     
-    if req.get("result").get("action").startswith('smalltalk')
+    if req.get("result").get("action").startswith("smalltalk"):
         speech = req.get("result").get("fulfillment").get("messages").get("speech")
         return {
         "speech": speech,
