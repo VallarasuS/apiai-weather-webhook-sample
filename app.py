@@ -33,6 +33,16 @@ def webhook():
 
 
 def processRequest(req):
+    
+    if req.get("result").get("action").startswith('smalltalk')
+        speech = req.get("result").get("fulfillment").get("messages").get("speech")
+        return {
+        "speech": speech,
+        "displayText": speech,
+        "source": "apiai-EULA-webhook-sample"
+        }
+        
+    
     if req.get("result").get("action") != "FetchEULA":
         return {}
 
