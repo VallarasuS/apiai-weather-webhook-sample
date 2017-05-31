@@ -64,6 +64,8 @@ def processRequest(req):
 
         result = urlopen(request).read()
         
+        #Request.urlopen(request)
+        
         print("After url open")
         
         data = json.loads(result)
@@ -95,7 +97,8 @@ def makeDoorLatchQuery(req):
     
     request = Request(
         baseurl + "/" + doorId + "/latchState/" + state,
-        headers={"Authorization" : ("Basic %s" % cred)}
+        headers={"Authorization" : ("Basic %s" % cred)},
+        method = "PUT"
     )
     
     print("Request : ")
