@@ -97,6 +97,10 @@ def makeDoorLatchQuery(req):
         baseurl + doorId + "/latchState/" + state,
         headers={"Authorization" : ("Basic %s" % cred)}
     )
+    
+    print("Request : ")
+    print(request)
+    
     return request
    
 def makeEULAQuery(req):    
