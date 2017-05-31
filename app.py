@@ -89,7 +89,7 @@ def makeDoorLatchQuery(req):
         return None
     
     request = Request(
-        baseurl + doorId + "/latchState/" + state + ")",
+        baseurl + doorId + "/latchState/" + state,
         headers={"Authorization" : ("Basic %s" % cred)}
     )
     return request
