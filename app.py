@@ -83,7 +83,7 @@ def makeDoorLatchQuery(req):
     
     print("makeDoorLatchQuery entry")
     
-    baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/ISOM/DeviceMgmt/Doors/"
+    baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/ISOM/DeviceMgmt/Doors"
     result = req.get("result")
     parameters = result.get("parameters")
     state = parameters.get("state")
@@ -94,12 +94,12 @@ def makeDoorLatchQuery(req):
         return None
     
     request = Request(
-        baseurl + doorId + "/latchState/" + state,
+        baseurl + "/" + doorId + "/latchState/" + state,
         headers={"Authorization" : ("Basic %s" % cred)}
     )
     
     print("Request : ")
-    print(request)
+    print(request.url)
     
     return request
    
