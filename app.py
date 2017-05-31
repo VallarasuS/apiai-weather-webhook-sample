@@ -94,13 +94,14 @@ def makeDoorLatchQuery(req):
 
     request1 = Request(
         baseurl + "/" + doorId + "/latchState/" + state,
-        headers={"Authorization" : ("Basic %s" % cred)},
-        method = 'PUT'
+        headers={"Authorization" : ("Basic %s" % cred)}
     )
     
+    request1.method = 'PUT'
+    
     print("Request : ")
-    print(request1.method)
-    print(request1.headers)
+    print(request1.get_method())
+    print(request1.get_headers())
     
     return request1
    
