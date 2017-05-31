@@ -41,22 +41,46 @@ def processRequest(req):
         "displayText": speech,
         "source": "apiai-EULA-webhook-sample"
         }
-        
     
-    if req.get("result").get("action") != "FetchEULA":
+    if req.get("result").get("action") == "FetchEULA":
+        request = makeEULAQuery(req)
+        if request is None:
+            return {}
+
+        result = urlopen(request).read()
+        data = json.loads(result)
+        res = makeEULAResult(data)
+        return res
+    elif req.get("result").get("action") == "LatchDoor":
+        request = makeDoorLatchQuery(req)
+        if request is None:
+            return {}
+
+        result = urlopen(request).read()
+        data = json.loads(result)
+        res = makeDoorLatchResult(data)
+        return res
+    else:
         return {}
-
-    request = makeYqlQuery(req)
-    if request is None:
-        return {}
-
-    result = urlopen(request).read()
-    data = json.loads(result)
-    res = makeWebhookResult(data)
-    return res
-
-
-def makeYqlQuery(req):    
+    
+def makeDoorLatchQuery(req):    
+    baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/ISOM/DeviceMgmt/Doors/"
+    result = req.get("result")
+    parameters = result.get("parameters")
+    state = parameters.get("state")
+    doorId = parameters.get("doorId")
+    cred = parameters.get("credential")
+    
+    if prod is None:
+        return None
+    
+    request = Request(
+        baseurl + doorId + "/latchState/" + state + ")",
+        headers={"Authorization" : ("Basic %s" % cred)}
+    )
+    return request
+   
+def makeEULAQuery(req):    
     baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/Custom/MPCEula/config?"
     result = req.get("result")
     parameters = result.get("parameters")
@@ -72,8 +96,7 @@ def makeYqlQuery(req):
     )
     return request
 
-
-def makeWebhookResult(data):
+def makeEULAResult(data):
     print("makeWebhookResult entry")
     first = data.get('mpcEulaConfig')[0]
     if first is None:
@@ -98,8 +121,6 @@ def makeWebhookResult(data):
 
     text = "HONEYWELL MAXPRO CLOUD HOSTED SERVICES END USER LICENSE AGREEMENT [truncated]..."
     
-    # print(json.dumps(item, indent=4))
-
     speech = "EULA for " + productName + " created on  " + createdDateTime + " is : " + text 
 
     print("Response:")
@@ -108,11 +129,34 @@ def makeWebhookResult(data):
     return {
         "speech": speech,
         "displayText": speech,
-        # "data": data,
-        # "contextOut": [],
         "source": "apiai-EULA-webhook-sample"
     }
 
+def makeDoorLatchResult(data):
+    print("makeDoorLatchResult entry")
+
+    statusCode = data.get('statusCode')
+    if statusCode is None:
+        return {}
+
+    print(statusCode)
+    
+    statusString = data.get('statusString')
+    if statusString is None:
+        return {}
+
+    print(statusString)
+
+    speech = "Status code = " + statusCode + ", Status String =  " + statusString
+
+    print("Response:")
+    print(speech)
+
+    return {
+        "speech": speech,
+        "displayText": speech,
+        "source": "apiai-Latch-webhook-sample"
+    }
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
