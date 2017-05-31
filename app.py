@@ -59,8 +59,13 @@ def processRequest(req):
         
         if request is None:
             return {}
+        
+        print("Before url open")
 
         result = urlopen(request).read()
+        
+        print(result)
+        
         data = json.loads(result)
         
         print("Result:")
