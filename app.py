@@ -102,6 +102,7 @@ def makeDoorLatchQuery(req):
     print("Request : ")
     print(request1.get_method())
     print(request1.get_headers())
+    print(request1.get_full_url())
     
     return request1
    
