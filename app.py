@@ -76,12 +76,19 @@ def processRequest(req):
         return {}
     
 def makeDoorLatchQuery(req):    
+    
+    print("makeDoorLatchQuery entry")
+    
     baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/ISOM/DeviceMgmt/Doors/"
     result = req.get("result")
     parameters = result.get("parameters")
     state = parameters.get("state")
     doorId = parameters.get("doorId")
     cred = parameters.get("credential")
+    
+    print(state)
+    print(doorId)
+    print(cred)
     
     if state is None:
         return None
