@@ -52,13 +52,25 @@ def processRequest(req):
         res = makeEULAResult(data)
         return res
     elif req.get("result").get("action") == "LatchDoor":
+        
+        print("LatchDoor entry")
+        
         request = makeDoorLatchQuery(req)
+        
+        print(request)
+        
         if request is None:
             return {}
 
         result = urlopen(request).read()
         data = json.loads(result)
+        
+        print(request)
+        
         res = makeDoorLatchResult(data)
+        
+        print(res)
+        
         return res
     else:
         return {}
