@@ -91,22 +91,18 @@ def makeDoorLatchQuery(req):
     state = parameters.get("state")
     doorId = parameters.get("doorId")
     cred = parameters.get("credential")
-   
-    if state is None:
-        return None
-    
-    request = Request(
-        url = baseurl + "/" + doorId + "/latchState/" + state,
+
+    request1 = Request(
+        baseurl + "/" + doorId + "/latchState/" + state,
         headers={"Authorization" : ("Basic %s" % cred)},
         method = 'PUT'
     )
     
     print("Request : ")
-    print(request.url)
-    print(request.method)
-    print(request.headers)
+    print(request1.method)
+    print(request1.headers)
     
-    return request
+    return request1
    
 def makeEULAQuery(req):    
     baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/Custom/MPCEula/config?"
