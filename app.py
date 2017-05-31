@@ -64,7 +64,7 @@ def processRequest(req):
 
         result = urlopen(request).read()
         
-        print(result)
+        print("After url open")
         
         data = json.loads(result)
         
