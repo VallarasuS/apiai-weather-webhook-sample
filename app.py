@@ -59,25 +59,23 @@ def processRequest(req):
         
         if req1 is None:
             return {}
-        
-        print("Before url open")
 
-        result = urlopen(req1).read()
+        res1 = urlopen(req1).read()
         
         #Request.urlopen(request)
         
         print("After url open")
         
-        data = json.loads(result)
+        data1 = json.loads(res1)
         
         print("Result:")
-        print(data)
+        print(data1)
         
-        res = makeDoorLatchResult(data)
+        res2 = makeDoorLatchResult(data1)
         
-        print(res)
+        print(res2)
         
-        return res
+        return res2
     else:
         return {}
     
