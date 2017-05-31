@@ -55,14 +55,14 @@ def processRequest(req):
         
         print("LatchDoor entry")
         
-        request = makeDoorLatchQuery(req)
+        req1 = makeDoorLatchQuery(req)
         
-        if request is None:
+        if req1 is None:
             return {}
         
         print("Before url open")
 
-        result = urlopen(request).read()
+        result = urlopen(req1).read()
         
         #Request.urlopen(request)
         
@@ -97,13 +97,7 @@ def makeDoorLatchQuery(req):
         headers={"Authorization" : ("Basic %s" % cred)}
     )
     
-    request1.method = 'PUT'
-    
-    print("Request : ")
-    print(request1.get_method())
-    print(request1.get_headers())
-    print(request1.get_full_url())
-    
+    request1.method = 'PUT'   
     return request1
    
 def makeEULAQuery(req):    
