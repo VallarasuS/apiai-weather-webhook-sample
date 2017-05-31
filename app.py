@@ -57,15 +57,14 @@ def processRequest(req):
         
         request = makeDoorLatchQuery(req)
         
-        print(request)
-        
         if request is None:
             return {}
 
         result = urlopen(request).read()
         data = json.loads(result)
         
-        print(request)
+        print("Result:")
+        print(data)
         
         res = makeDoorLatchResult(data)
         
@@ -85,11 +84,7 @@ def makeDoorLatchQuery(req):
     state = parameters.get("state")
     doorId = parameters.get("doorId")
     cred = parameters.get("credential")
-    
-    print(state)
-    print(doorId)
-    print(cred)
-    
+   
     if state is None:
         return None
     
