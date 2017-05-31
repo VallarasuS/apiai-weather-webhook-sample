@@ -71,7 +71,7 @@ def makeDoorLatchQuery(req):
     doorId = parameters.get("doorId")
     cred = parameters.get("credential")
     
-    if prod is None:
+    if state is None:
         return None
     
     request = Request(
