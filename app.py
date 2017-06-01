@@ -68,8 +68,8 @@ def processRequest(req):
         print("Result:")
         print(result)
         
-        result = makeDoorLatchResult(result)
-        return result
+        result1 = makeDoorLatchResult(result)
+        return result1
     else:
         print("Action undefined")
         return {}
