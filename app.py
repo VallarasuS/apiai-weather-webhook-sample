@@ -55,28 +55,23 @@ def processRequest(req):
         
         print("LatchDoor entry")
         
-        req1 = makeDoorLatchQuery(req)
+        query = makeDoorLatchQuery(req)
         
-        if req1 is None:
+        if query is None:
             return {}
 
-        res1 = urlopen(req1).read()
-        
-        #Request.urlopen(request)
+        response = urlopen(query).read()
         
         print("After url open")
-        
-        data1 = json.loads(res1)
+        result = json.loads(response)
         
         print("Result:")
-        print(data1)
+        print(result)
         
-        res2 = makeDoorLatchResult(data1)
-        
-        print(res2)
-        
-        return res2
+        result = makeDoorLatchResult(result)
+        return result
     else:
+        print("Action undefined")
         return {}
     
 def makeDoorLatchQuery(req):    
