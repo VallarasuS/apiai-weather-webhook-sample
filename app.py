@@ -18,16 +18,22 @@ from flask import make_response
 # Flask app should start in global layout
 app = Flask(__name__)
 
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     req = request.get_json(silent=True, force=True)
+
     res = processRequest(req)
+
     res = json.dumps(res, indent=4)
+    # print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
     return r
 
+
 def processRequest(req):
+    
     if req.get("result").get("action").startswith("smalltalk"):
         speech = req.get("result").get("fulfillment").get("messages").get("speech")
         return {
@@ -46,30 +52,33 @@ def processRequest(req):
         res = makeEULAResult(data)
         return res
     elif req.get("result").get("action") == "LatchDoor":
-        req1 = makeDoorLatchQuery(req)
-        if req1 is None:
+        request = makeDoorLatchQuery(req)
+        if request is None:
             return {}
 
-        res1 = urlopen(req1).read()
-        data1 = json.loads(res1)
-        res2 = makeDoorLatchResult(data1)
-        return res2
+        result = urlopen(request).read()
+        data = json.loads(result)
+        res = makeDoorLatchResult(data)
+        return res
     else:
         return {}
     
 def makeDoorLatchQuery(req):    
-    baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/ISOM/DeviceMgmt/Doors"
+    baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/ISOM/DeviceMgmt/Doors/"
     result = req.get("result")
     parameters = result.get("parameters")
     state = parameters.get("state")
     doorId = parameters.get("doorId")
     cred = parameters.get("credential")
-
-    request1 = Request(
-        baseurl + "/" + doorId + "/latchState/" + state,
+    
+    if state is None:
+        return None
+    
+    request = Request(
+        baseurl + doorId + "/latchState/" + state + ")",
         headers={"Authorization" : ("Basic %s" % cred)}
     )
-    return request1
+    return request
    
 def makeEULAQuery(req):    
     baseurl = "https://isom.beta.mymaxprocloud.com/ISOM/Custom/MPCEula/config?"
@@ -88,6 +97,7 @@ def makeEULAQuery(req):
     return request
 
 def makeEULAResult(data):
+    print("makeWebhookResult entry")
     first = data.get('mpcEulaConfig')[0]
     if first is None:
         return {}
@@ -96,17 +106,25 @@ def makeEULAResult(data):
     if productName is None:
         return {}
 
+    print(productName)
+    
     createdDateTime = first.get('createdDateTime')
     if createdDateTime is None:
         return {}
 
+    print(createdDateTime)
+    
     text = first.get('text')
     
     if text is None:
         return {}
 
     text = "HONEYWELL MAXPRO CLOUD HOSTED SERVICES END USER LICENSE AGREEMENT [truncated]..."
+    
     speech = "EULA for " + productName + " created on  " + createdDateTime + " is : " + text 
+
+    print("Response:")
+    print(speech)
 
     return {
         "speech": speech,
@@ -115,14 +133,25 @@ def makeEULAResult(data):
     }
 
 def makeDoorLatchResult(data):
+    print("makeDoorLatchResult entry")
+
     statusCode = data.get('statusCode')
     if statusCode is None:
         return {}
+
+    print(statusCode)
+    
     statusString = data.get('statusString')
     if statusString is None:
         return {}
 
+    print(statusString)
+
     speech = "Status code = " + statusCode + ", Status String =  " + statusString
+
+    print("Response:")
+    print(speech)
+
     return {
         "speech": speech,
         "displayText": speech,
